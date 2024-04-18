@@ -1,4 +1,4 @@
-// Este é um script simples que exibe um alerta quando a página é carregada
-window.onload = function() {
-    alert("Olá! Este é um alerta simples.");
-};
+ // Função para exibir o alerta quando o usuário clicar em qualquer lugar da página
+        document.addEventListener("click", function() {
+            alert("Você clicou em algum lugar da página!");
+        });
