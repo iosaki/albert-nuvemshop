@@ -1,5 +1,4 @@
-// Função para exibir o alerta quando o botão for clicado
-function exibirAlerta() {
-    // Exibe um alerta com uma mensagem
-    alert("Olá! Este é um simples script de alerta em JavaScript.");
-}
+// Este é um script simples que exibe um alerta quando a página é carregada
+window.onload = function() {
+    alert("Olá! Este é um alerta simples.");
+};
