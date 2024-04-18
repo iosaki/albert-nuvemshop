@@ -13,8 +13,3 @@ function adicionarNovoBotao() {
     // Adiciona o novo botão ao corpo do documento
     corpoDocumento.appendChild(novoBotao);
 }
-
-// Chama a função para adicionar o novo botão quando a página for carregada
-window.onload = function() {
-    adicionarNovoBotao();
-};
