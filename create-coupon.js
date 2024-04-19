@@ -22,11 +22,11 @@ function createModal() {
   cpfInput.type = 'text';
   cpfInput.placeholder = 'CPF';
   cpfInput.id = 'cpfInput';
+  cpfInput.style.width = '100%'; // Corrigindo a largura do input
   
   var closeButton = document.createElement('button');
   closeButton.textContent = 'Não quero';
   closeButton.className = 'close-button';
-  closeButton.style.marginRight = '10px'; // Adicionando espaço entre os botões
   
   var submitButton = document.createElement('button');
   submitButton.textContent = 'Enviar';
@@ -36,11 +36,19 @@ function createModal() {
   modalContent.appendChild(cashbackText);
   modalContent.appendChild(cpfInput);
   modalContent.appendChild(submitButton);
+  modalContent.appendChild(document.createElement('br')); // Adicionando uma quebra de linha entre os botões
   modalContent.appendChild(closeButton);
   modal.appendChild(modalContent);
   
   // Adicionando o modal à página
   document.body.appendChild(modal);
+  
+  // Aplicando a máscara ao input de CPF
+  cpfInput.addEventListener('input', function(event) {
+    var value = event.target.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+    var formattedValue = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); // Aplica a máscara
+    event.target.value = formattedValue;
+  });
   
   // Adicionando estilo de gradiente apenas ao contorno do input quando estiver em foco
   cpfInput.addEventListener('focus', function() {
@@ -88,7 +96,7 @@ style.textContent = `
   }
   
   input[type="text"] {
-    width: calc(100% - 24px); /* Leva em conta a largura das bordas */
+    width: calc(100% - 4px); /* Leva em conta a largura das bordas */
     padding: 10px;
     margin-bottom: 10px;
     border: 2px solid #ccc;
@@ -97,20 +105,10 @@ style.textContent = `
     transition: border-color 0.3s ease-in-out;
   }
   
-  .close-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .close-button:hover {
-    background-color: #0056b3;
-  }
-  
-  button {
+  .close-button, button {
+    display: block; /* Botões agora são exibidos em blocos */
+    width: 100%; /* Ocupam a largura total do contêiner */
+    margin-top: 5px; /* Espaçamento entre os botões */
     background: linear-gradient(to right, #ff005a, #ff281e);
     color: white;
     padding: 10px 20px;
@@ -119,7 +117,7 @@ style.textContent = `
     cursor: pointer;
   }
   
-  button:hover {
+  .close-button:hover, button:hover {
     background: linear-gradient(to right, #ff005a, #ff281e);
   }
 `;
