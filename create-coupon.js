@@ -1,6 +1,7 @@
 // Criação do modal
 function createModal() {
   // Criação dos elementos HTML
+  console.log('script iniciado')
   var modal = document.createElement('div');
   modal.className = 'modal';
   
