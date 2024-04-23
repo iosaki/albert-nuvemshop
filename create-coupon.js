@@ -7,6 +7,10 @@ function createModal() {
   var modalContent = document.createElement('div');
   modalContent.className = 'modal-content';
   
+  var closeButton = document.createElement('span'); // Alterado para <span> para representar o ícone de fechar
+  closeButton.textContent = '×'; // Símbolo "x" para fechar o modal
+  closeButton.className = 'close-icon'; // Adicionando classe para estilização
+  
   var logoImg = document.createElement('img');
   logoImg.src = 'https://uploads-ssl.webflow.com/611e7d70d4e879564857dd9d/66154344f41761f4afc3bf7e_albert_logo_com_tagline_1.png';
   logoImg.alt = 'Logo';
@@ -24,43 +28,21 @@ function createModal() {
   cpfInput.id = 'cpfInput';
   cpfInput.style.width = '100%'; // Corrigindo a largura do input
   
-  var closeButton = document.createElement('button');
-  closeButton.textContent = 'Não quero';
-  closeButton.className = 'close-button';
-  
   var submitButton = document.createElement('button');
   submitButton.textContent = 'Enviar';
   
   // Adicionando elementos ao modal
+  modalContent.appendChild(closeButton); // Adicionando o botão de fechar
   modalContent.appendChild(logoImg);
   modalContent.appendChild(cashbackText);
   modalContent.appendChild(cpfInput);
   modalContent.appendChild(submitButton);
-  modalContent.appendChild(document.createElement('br')); // Adicionando uma quebra de linha entre os botões
-  modalContent.appendChild(closeButton);
   modal.appendChild(modalContent);
   
   // Adicionando o modal à página
   document.body.appendChild(modal);
   
-  // Aplicando a máscara ao input de CPF
-  cpfInput.addEventListener('input', function(event) {
-    var value = event.target.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
-    var formattedValue = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); // Aplica a máscara
-    event.target.value = formattedValue;
-  });
-  
-  // Adicionando estilo de gradiente apenas ao contorno do input quando estiver em foco
-  cpfInput.addEventListener('focus', function() {
-    cpfInput.style.border = '2px solid linear-gradient(to right, #ff005a, #ff281e)';
-  });
-  
-  // Removendo o estilo de gradiente quando o input perde o foco
-  cpfInput.addEventListener('blur', function() {
-    cpfInput.style.border = '2px solid #ccc';
-  });
-  
-  // Adicionando evento de clique ao botão "Não quero" para fechar o modal
+  // Adicionando evento de clique ao botão de fechar para fechar o modal
   closeButton.addEventListener('click', function() {
     document.body.removeChild(modal);
   });
@@ -93,6 +75,15 @@ style.textContent = `
   
   .modal-content {
     text-align: center;
+    position: relative; // Para posicionar o botão de fechar corretamente
+  }
+  
+  .close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
   }
   
   input[type="text"] {
@@ -105,7 +96,7 @@ style.textContent = `
     transition: border-color 0.3s ease-in-out;
   }
   
-  .close-button, button {
+  button {
     display: block; /* Botões agora são exibidos em blocos */
     width: 100%; /* Ocupam a largura total do contêiner */
     margin-top: 5px; /* Espaçamento entre os botões */
@@ -117,7 +108,7 @@ style.textContent = `
     cursor: pointer;
   }
   
-  .close-button:hover, button:hover {
+  button:hover {
     background: linear-gradient(to right, #ff005a, #ff281e);
   }
 `;
