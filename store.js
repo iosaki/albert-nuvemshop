@@ -1,100 +1,53 @@
-// Função para criar o sinal de dinheiro giratório
-function createMoneySign() {
-  var moneySign = document.createElement('div');
-  moneySign.className = 'money-sign';
-  moneySign.innerHTML = '$';
-  document.body.appendChild(moneySign);
+// Criar elementos HTML dinamicamente
+var container = document.createElement('div');
+container.className = 'container';
 
-  // Adiciona eventos de mouse para exibir e esconder o balão de texto
-  moneySign.addEventListener('mouseenter', showBalloon);
-  moneySign.addEventListener('mouseleave', hideBalloon);
+var ball = document.createElement('div');
+ball.className = 'ball';
+ball.textContent = 'A';
+
+var popup = document.createElement('div');
+popup.className = 'popup';
+popup.id = 'popup';
+popup.style.bottom = '0';
+popup.style.visibility = 'hidden';
+
+var closeBtn = document.createElement('span');
+closeBtn.className = 'close';
+closeBtn.textContent = 'X';
+closeBtn.addEventListener('click', closePopup);
+
+var message = document.createElement('p');
+message.textContent = 'Aqui tem cashback do Albert! Para utilizar faça o login com o mesmo e-mail.';
+
+var button = document.createElement('button');
+button.textContent = 'Quero me cadastrar';
+button.addEventListener('click', redirectToLogin);
+
+popup.appendChild(closeBtn);
+popup.appendChild(message);
+popup.appendChild(button);
+
+container.appendChild(ball);
+container.appendChild(popup);
+
+document.body.appendChild(container);
+
+function showPopup() {
+  var popupHeight = popup.offsetHeight;
+  var ballHeight = ball.offsetHeight;
+  popup.style.visibility = 'visible';
+  popup.style.bottom = 'calc(100% + 80px - ' + (popupHeight + ballHeight) + 'px)';
 }
 
-// Função para exibir o balão de texto
-function showBalloon(event) {
-  var balloon = document.createElement('div');
-  balloon.className = 'balloon';
-
-  // Texto do balão
-  var balloonText = document.createElement('p');
-  balloonText.textContent = 'Aqui tem cashback do Albert! Para utilizar faça o login com o mesmo e-mail.';
-
-  // Botão de fechar
-  var closeButton = document.createElement('button');
-  closeButton.textContent = 'X';
-  closeButton.className = 'close-button';
-  closeButton.addEventListener('click', function() {
-    document.body.removeChild(balloon);
-  });
-
-  // Adiciona o texto e o botão de fechar ao balão
-  balloon.appendChild(balloonText);
-  balloon.appendChild(closeButton);
-
-  // Posiciona o balão acima e à esquerda do símbolo de dinheiro
-  var moneySign = event.target;
-  var rect = moneySign.getBoundingClientRect();
-  balloon.style.position = 'fixed';
-  balloon.style.top = rect.top - balloon.offsetHeight + 'px';
-  balloon.style.left = rect.left + 'px';
-
-  document.body.appendChild(balloon);
+function closePopup() {
+  popup.style.visibility = 'hidden';
 }
 
-// Função para esconder o balão de texto
-function hideBalloon() {
-  var balloon = document.querySelector('.balloon');
-  if (balloon) {
-    document.body.removeChild(balloon);
-  }
+function redirectToLogin() {
+  // Redirecionar para a página de login
+  // window.location.href = 'pagina_de_login.html';
 }
 
-// Função para aplicar estilos CSS ao sinal de dinheiro e ao balão de texto
-function applyStyles() {
-  var style = document.createElement('style');
-  style.textContent = `
-    .money-sign {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      font-size: 24px;
-      color: green;
-      animation: spin 2s linear infinite;
-      cursor: pointer; /* Adiciona cursor de ponteiro para indicar que é clicável */
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .balloon {
-      position: absolute;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-      z-index: 999; /* Garante que o balão seja exibido acima de outros elementos */
-    }
-
-    .close-button {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      font-size: 14px;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-// Chama as funções para criar o sinal de dinheiro, aplicar os estilos e adicionar os eventos de mouse
-createMoneySign();
-applyStyles();
+// Adicionar evento de hover na bola para mostrar o popup
+ball.addEventListener('mouseover', showPopup);
