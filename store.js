@@ -7,7 +7,8 @@ function createBall() {
 
   // Adiciona eventos de mouse para exibir e esconder o balão de texto
   ball.addEventListener('mouseenter', showBalloon);
-  ball.addEventListener('mouseleave', hideBalloon);
+  // Remova o evento para esconder o balão no hover out
+  // ball.addEventListener('mouseleave', hideBalloon);
 }
 
 // Função para exibir o balão de texto
@@ -25,6 +26,8 @@ function showBalloon(event) {
   closeButton.className = 'close-button';
   closeButton.addEventListener('click', function() {
     document.body.removeChild(balloon);
+    // Remova o ouvinte de eventos para fechar o balão clicando fora dele
+    document.removeEventListener('click', closeOnOutsideClick);
   });
 
   // Botão de cadastrar
@@ -42,16 +45,21 @@ function showBalloon(event) {
   balloon.style.position = 'fixed';
   balloon.style.top = '50%';
   balloon.style.right = '20px'; // Margem direita de 20px
-  balloon.style.transform = 'translateY(-50%)'; // Centraliza verticalmente
+  balloon.style.transform = 'translate(-50%, -50%)'; // Centraliza vertical e horizontalmente
 
   document.body.appendChild(balloon);
+
+  // Adiciona um ouvinte de eventos para fechar o balão clicando fora dele
+  document.addEventListener('click', closeOnOutsideClick);
 }
 
-// Função para esconder o balão de texto
-function hideBalloon() {
+// Função para fechar o balão clicando fora dele
+function closeOnOutsideClick(event) {
   var balloon = document.querySelector('.balloon');
-  if (balloon) {
+  if (balloon && !balloon.contains(event.target)) {
     document.body.removeChild(balloon);
+    // Remova o ouvinte de eventos para fechar o balão clicando fora dele
+    document.removeEventListener('click', closeOnOutsideClick);
   }
 }
 
@@ -86,7 +94,7 @@ function applyStyles() {
       background-color: #fff;
       border: 1px solid #ccc;
       padding: 10px;
-      border-radius: 5px;
+      border-radius: 10px; /* Torna o balão mais quadrado */
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
       z-index: 999; /* Garante que o balão seja exibido acima de outros elementos */
     }
@@ -98,16 +106,18 @@ function applyStyles() {
       border: none;
       border-radius: 5px;
       padding: 5px 10px;
-      margin-top: 10px;
       cursor: pointer;
     }
 
     .close-button {
-      float: right;
+      position: absolute;
+      top: 5px;
+      right: 5px;
     }
 
     .register-button {
       display: block;
+      margin-top: 20px; /* Adiciona margem acima do botão de cadastrar */
     }
   `;
   document.head.appendChild(style);
