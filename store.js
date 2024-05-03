@@ -1,7 +1,7 @@
 // Criar elementos HTML dinamicamente
 var container = document.createElement('div');
 container.className = 'container';
-
+ 
 var ball = document.createElement('div');
 ball.className = 'ball';
 ball.textContent = 'A';
