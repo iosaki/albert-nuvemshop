@@ -67,8 +67,8 @@ style.textContent = `
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    max-width: 400px;
+    width: 400px;
+    height: 400px;
   }
   
   .modal-content {
@@ -101,4 +101,3 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
-
