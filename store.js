@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+
   function criarBalao() {
     // Criar elemento div para o balão de texto
     var balao = document.createElement("div");
@@ -140,4 +140,3 @@ balao.appendChild(botao);
   // Chamar a função para criar o botão e o balão
   criarBotao();
   criarBalao();
-});
