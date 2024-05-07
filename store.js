@@ -1,142 +1,124 @@
+// Função para criar a bola com o balão de texto
+function createBall() {
+  var ball = document.createElement('div');
+  ball.className = 'ball';
+  ball.textContent = 'A';
+  document.body.appendChild(ball);
 
-  function criarBalao() {
-    // Criar elemento div para o balão de texto
-    var balao = document.createElement("div");
-    balao.className = "balao";
+  // Adiciona eventos de mouse para exibir e esconder o balão de texto
+  ball.addEventListener('mouseenter', showBalloon);
+  // Remova o evento para esconder o balão no hover out
+  // ball.addEventListener('mouseleave', hideBalloon);
+}
 
-    // Adicionar ícone de fechar com SVG
-    var closeButton = document.createElement("button");
-    closeButton.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 7l10 10m-10 0l10-10"/>
-      </svg>`;
-    closeButton.className = "close-button";
-    closeButton.style.position = "absolute";
-    closeButton.style.top = "10px";
-    closeButton.style.right = "10px";
-    closeButton.style.cursor = "pointer";
-    closeButton.style.border = "none";
-    closeButton.style.backgroundColor = "transparent";
-    closeButton.addEventListener("click", esconderBalao);
-    balao.appendChild(closeButton);
+// Função para exibir o balão de texto
+function showBalloon(event) {
+  var balloon = document.createElement('div');
+  balloon.className = 'balloon';
 
-    // Adicionar logo dentro do balão
-    var logo = document.createElement("img");
-    logo.src = "https://albert-mkt.s3.amazonaws.com/albert+muito+ale%CC%81m+de+cashback.png";
-    logo.alt = "Logo";
-    logo.style.height = "70px";
-    logo.style.width = "auto";
-    balao.appendChild(logo);
+  // Texto do balão
+  var balloonText = document.createElement('p');
+  balloonText.textContent = 'Aqui tem cashback do Albert! Para utilizar faça o login com o mesmo e-mail.';
 
-    // Adicionar texto dentro do balão
-    // Adicionar texto dentro do balão
-// Adicionar texto dentro do balão
-var texto = document.createElement("p");
-texto.innerHTML = `
-  <strong>Tem cashback te esperando no final da compra!</strong><br><br>Faça o login por aqui com o mesmo e-mail que cadastrou no Albert para conseguir usar seu cashback, ok?<br><br>
-  Ah, e se você ainda não é um associado Albert, clique aqui:
-`;
-texto.style.margin = "10px 10px 30px 10px";
-texto.style.textAlign = "justify"; // Adicionando o estilo para justificar o texto
+  // Botão de fechar
+  var closeButton = document.createElement('button');
+  closeButton.textContent = 'X';
+  closeButton.className = 'close-button';
+  closeButton.addEventListener('click', function() {
+    document.body.removeChild(balloon);
+    // Remova o ouvinte de eventos para fechar o balão clicando fora dele
+    document.removeEventListener('click', closeOnOutsideClick);
+  });
 
-balao.appendChild(texto);
+  // Botão de cadastrar
+  var registerButton = document.createElement('button');
+  registerButton.textContent = 'Quero me cadastrar';
+  registerButton.className = 'register-button';
+  registerButton.addEventListener('click', redirectToLogin);
 
-// Criar botão dentro do balão
-var botao = document.createElement("a");
-botao.style.textDecoration = "none";
-botao.textContent = "Quero cashback";
-botao.href = "https://associados.oialbert.com.br/criar-conta?code=SEJAASSOCIADO";
-botao.target = "_blank"; // Abrir em uma nova aba
-botao.style.background = "linear-gradient(90deg, #ff281e, #ff005a)";
-botao.style.color = "#fff";
-botao.style.borderRadius = "10px"; // Aumentando o raio para deixar as bordas mais arredondadas
-botao.style.padding = "10px"
-botao.style.cursor = "pointer";
-botao.style.fontWeight = "bold";
-balao.appendChild(botao);
+  // Adiciona o texto, botão de fechar e botão de cadastrar ao balão
+  balloon.appendChild(balloonText);
+  balloon.appendChild(closeButton);
+  balloon.appendChild(registerButton);
 
+  // Posiciona o balão centralizado na margem direita da tela
+  balloon.style.position = 'fixed';
+  balloon.style.top = '50%';
+  balloon.style.right = '20px'; // Margem direita de 20px
+  balloon.style.transform = 'translate(-50%, -50%)'; // Centraliza vertical e horizontalmente
 
-    // Estilos CSS para o balão
-    balao.style.position = "fixed";
-    balao.style.height = "350px"; // Ajustado para acomodar o botão
-    balao.style.width = "250px";
-    balao.style.top = "60%";
-    balao.style.right = "30px"; // Ajuste para a margem direita
-    balao.style.transform = "translateY(-50%)";
-    balao.style.padding = "10px 20px";
-    balao.style.backgroundColor = "#fff"; 
-    balao.style.border = "1px solid #ccc";
-    balao.style.borderRadius = "5px";
-    balao.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)";
-    balao.style.zIndex = "99";
-    balao.style.opacity = "0";
+  document.body.appendChild(balloon);
 
-    // Adicionar o balão à página
-    document.body.appendChild(balao);
+  // Adiciona um ouvinte de eventos para fechar o balão clicando fora dele
+  document.addEventListener('click', closeOnOutsideClick);
+}
 
-    return balao;
+// Função para fechar o balão clicando fora dele
+function closeOnOutsideClick(event) {
+  var balloon = document.querySelector('.balloon');
+  if (balloon && !balloon.contains(event.target)) {
+    document.body.removeChild(balloon);
+    // Remova o ouvinte de eventos para fechar o balão clicando fora dele
+    document.removeEventListener('click', closeOnOutsideClick);
   }
+}
 
-  function mostrarBalao() {
-    var balao = document.querySelector(".balao");
-    // Transição de opacidade para mostrar o balão
-    balao.style.transition = "opacity 0.5s ease"; // Tempo e tipo de transição
-    balao.style.opacity = "1"; // Mostrar o balão
-  }
+// Função para redirecionar para a página de login
+function redirectToLogin() {
+  // Redirecionar para a página de login
+  // window.location.href = 'pagina_de_login.html';
+}
 
-  function esconderBalao() {
-    var balao = document.querySelector(".balao");
-    // Transição de opacidade para esconder o balão
-    balao.style.transition = "opacity 0.5s ease"; // Tempo e tipo de transição
-    balao.style.opacity = "0"; // Ocultar o balão
-  }
+// Função para aplicar estilos CSS à bola e ao balão de texto
+function applyStyles() {
+  var style = document.createElement('style');
+  style.textContent = `
+    .ball {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: red;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      margin: 20px;
+      z-index: 2;
+    }
+    .balloon {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 10px; /* Torna o balão mais quadrado */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      z-index: 999; /* Garante que o balão seja exibido acima de outros elementos */
+    }
+    .close-button, .register-button {
+      font-size: 14px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .close-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+    .register-button {
+      display: block;
+      margin-top: 20px; /* Adiciona margem acima do botão de cadastrar */
+    }
+  `;
+  document.head.appendChild(style);
+}
 
-  function criarBotao() {
-    // Criar elemento <a> com a classe 'ball'
-    var link = document.createElement("a");
-    link.className = "ball";
-    link.title = "Show Chat";
-    link.textContent = "aqui tem cashback!";
-
-    // Adicionar estilos CSS inline
-    link.style.background =
-      "linear-gradient(-50deg, #ff281e, #ff005a, #C00044, #D3004B, #FF143C)";
-    link.style.backgroundSize = "320% 200%";
-    link.style.animation = "Gradient 15s ease infinite";
-    link.style.color = "#fff";
-    link.style.position = "fixed";
-    link.style.zIndex = "98";
-    link.style.bottom = "25px";
-    link.style.right = "30px";
-    link.style.fontSize = "15px";
-    link.style.padding = "10px 20px";
-    link.style.borderRadius = "30px";
-    link.style.boxShadow = "0 1px 15px rgba(32, 33, 36, 0.28)";
-
-    // Adicionar animações de gradiente
-    var style = document.createElement("style");
-    style.textContent = `
-      @keyframes Gradient {
-        0% {
-          background-position: 0 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0 50%;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Adicionar o botão à página
-    document.body.appendChild(link);
-
-    // Adicionar evento de mouseover para mostrar o balão
-    link.addEventListener("mouseover", mostrarBalao);
-  }
-
-  // Chamar a função para criar o botão e o balão
-  criarBotao();
-  criarBalao();
+// Chama as funções para criar a bola com o balão de texto e aplicar os estilos
+createBall();
+applyStyles();
