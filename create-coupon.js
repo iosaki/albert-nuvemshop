@@ -1,71 +1,61 @@
-// Função para verificar se a URL contém "/checkout/v3/start/"
 function urlContainsCheckout() {
   return window.location.href.includes("/checkout/v3/next/");
 }
 
-// Verificar se a URL contém "/checkout/v3/start/" antes de criar o modal
 if (urlContainsCheckout()) {
-  // Função para criar o modal e adicionar os ouvintes de evento
   function createModal() {
-    // Criação dos elementos HTML
-    var modal = document.createElement('div');
-    modal.className = 'modal';
-    
-    var modalContent = document.createElement('div');
-    modalContent.className = 'modal-content';
-    
-    var closeButton = document.createElement('span'); // Alterado para <span> para representar o ícone de fechar
-    closeButton.textContent = '×'; // Símbolo "x" para fechar o modal
-    closeButton.className = 'close-icon'; // Adicionando classe para estilização
-    
-    var logoImg = document.createElement('img');
-    logoImg.src = 'https://uploads-ssl.webflow.com/611e7d70d4e879564857dd9d/66154344f41761f4afc3bf7e_albert_logo_com_tagline_1.png';
-    logoImg.alt = 'Logo';
+    var modal = document.createElement("div");
+    modal.className = "modal";
+
+    var modalContent = document.createElement("div");
+    modalContent.className = "modal-content";
+
+    var closeButton = document.createElement("span");
+    closeButton.textContent = "×";
+    closeButton.className = "close-icon";
+
+    var logoImg = document.createElement("img");
+    logoImg.src =
+      "https://uploads-ssl.webflow.com/611e7d70d4e879564857dd9d/66154344f41761f4afc3bf7e_albert_logo_com_tagline_1.png";
+    logoImg.alt = "Logo";
     logoImg.width = 148.66;
     logoImg.height = 83.5;
-    logoImg.style.marginBottom = '20px'; // Adicionando margem inferior
-    
-    var cashbackText = document.createElement('p');
-    cashbackText.textContent = 'Quer utilizar seu cashback albert?';
-    cashbackText.style.marginBottom = '20px'; // Adicionando margem inferior
-    
-    var cpfInput = document.createElement('input');
-    cpfInput.type = 'text';
-    cpfInput.placeholder = 'CPF';
-    cpfInput.id = 'cpfInput';
-    cpfInput.style.width = '100%'; // Corrigindo a largura do input
-    
-    var submitButton = document.createElement('button');
-    submitButton.textContent = 'Enviar';
-    
-    // Adicionando elementos ao modal
-    modalContent.appendChild(closeButton); // Adicionando o botão de fechar
+
+    var cashbackText = document.createElement("p");
+    cashbackText.textContent =
+      "Hey! Tem cashback na sua carteira e você pode usá-lo como parte do pagamento.\nSeu saldo disponível para uso é de R$XX,XX.";
+    cashbackText.style.marginBottom = "20px";
+
+    var yesButton = document.createElement("button");
+    yesButton.textContent = "Quero usar nessa compra";
+    yesButton.classList.add("button", "yes-button");
+
+    var noButton = document.createElement("button");
+    noButton.textContent = "Não quero usar agora";
+    noButton.classList.add("button", "no-button");
+
+    modalContent.appendChild(closeButton);
     modalContent.appendChild(logoImg);
     modalContent.appendChild(cashbackText);
-    modalContent.appendChild(cpfInput);
-    modalContent.appendChild(submitButton);
+    modalContent.appendChild(yesButton);
+    modalContent.appendChild(noButton);
     modal.appendChild(modalContent);
-    
-    // Adicionando o modal à página
+
     document.body.appendChild(modal);
-    
-    // Adicionando evento de clique ao botão de fechar para fechar o modal
-    closeButton.addEventListener('click', function() {
+
+    closeButton.addEventListener("click", function () {
       document.body.removeChild(modal);
     });
   }
-  
-  // Função para exibir o modal quando o usuário clicar na tela pela primeira vez
+
   function firstClickHandler() {
     createModal();
-    document.removeEventListener('click', firstClickHandler);
+    document.removeEventListener("click", firstClickHandler);
   }
-  
-  // Adicionando o listener para o primeiro clique na tela
-  document.addEventListener('click', firstClickHandler);
-  
-  // Estilos CSS para o modal
-  var style = document.createElement('style');
+
+  document.addEventListener("click", firstClickHandler);
+
+  var style = document.createElement("style");
   style.textContent = `
     .modal {
       position: fixed;
@@ -77,47 +67,50 @@ if (urlContainsCheckout()) {
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
       padding: 20px;
-      max-width: 400px;
+      max-width: 350px;
+      max-height: 300px;
     }
     
     .modal-content {
       text-align: center;
-      position: relative; // Para posicionar o botão de fechar corretamente
     }
     
     .close-icon {
-      position: absolute;
+      position: fixed;
       top: 10px;
       right: 10px;
       font-size: 20px;
       cursor: pointer;
     }
     
-    input[type="text"] {
-      width: calc(100% - 4px); /* Leva em conta a largura das bordas */
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 2px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-      transition: border-color 0.3s ease-in-out;
-    }
+.button {
+    width: 70%;
+    margin-top: 5px;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.yes-button {
+    background: linear-gradient(to right, #ff005a, #ff281e);
+}
+
+.no-button {
+    background: white;
+    color: #ff005a;
+    border: 1px solid #ff281e;
+}
+
+.yes-button:hover {
+  background: linear-gradient(to right, rgba(255, 0, 90, 0.8), rgba(255, 40, 30, 0.8));
+}
+
+.no-button:hover {
+  background: linear-gradient(to right, rgba(255, 0, 90, 0.08), rgba(255, 40, 30, 0.08));
+}
     
-    button {
-      display: block; /* Botões agora são exibidos em blocos */
-      width: 100%; /* Ocupam a largura total do contêiner */
-      margin-top: 5px; /* Espaçamento entre os botões */
-      background: linear-gradient(to right, #ff005a, #ff281e);
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    
-    button:hover {
-      background: linear-gradient(to right, #ff005a, #ff281e);
-    }
   `;
   document.head.appendChild(style);
 }
