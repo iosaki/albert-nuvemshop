@@ -2,7 +2,19 @@ function urlContainsCheckout() {
   return window.location.href.includes("/checkout/v3/next/");
 }
 
-if (urlContainsCheckout()) {
+if (urlContainsCheckout() && !window.location.href.includes("cashback=no")) {
+  // Function to extract cashback value from HTML
+  function getCashbackValue() {
+    // Find the element containing the cashback value
+    var cashbackElement = document.querySelector(".table-discount-promotion td.text-right.text-pre span");
+    // Extract the text content and remove non-numeric characters
+    var cashbackText = cashbackElement.textContent.replace(/[^\d\,\.]/g, '');
+    // Convert the text to a float value
+    var cashbackValue = parseFloat(cashbackText.replace(',', '.'));
+    return cashbackValue;
+  }
+
+  // Function to create the modal
   function createModal() {
     var modal = document.createElement("div");
     modal.className = "modal";
@@ -15,15 +27,14 @@ if (urlContainsCheckout()) {
     closeButton.className = "close-icon";
 
     var logoImg = document.createElement("img");
-    logoImg.src =
-      "https://uploads-ssl.webflow.com/611e7d70d4e879564857dd9d/66154344f41761f4afc3bf7e_albert_logo_com_tagline_1.png";
+    logoImg.src = "https://uploads-ssl.webflow.com/611e7d70d4e879564857dd9d/66154344f41761f4afc3bf7e_albert_logo_com_tagline_1.png";
     logoImg.alt = "Logo";
     logoImg.width = 148.66;
     logoImg.height = 83.5;
 
     var cashbackText = document.createElement("p");
-    cashbackText.textContent =
-      "Hey! Tem cashback na sua carteira e você pode usá-lo como parte do pagamento.\nSeu saldo disponível para uso é de R$XX,XX.";
+    // Get the cashback value and replace "XX" in the text
+    cashbackText.textContent = "Hey! Tem cashback na sua carteira e você pode usá-lo como parte do pagamento.\nSeu saldo disponível para uso é de R$" + getCashbackValue().toFixed(2) + ".";
     cashbackText.style.marginBottom = "20px";
 
     var yesButton = document.createElement("button");
@@ -45,6 +56,11 @@ if (urlContainsCheckout()) {
 
     closeButton.addEventListener("click", function () {
       document.body.removeChild(modal);
+    });
+
+    noButton.addEventListener("click", function () {
+      var newUrl = window.location.href.split('?')[0] + '?cashback=no';
+      window.location.href = newUrl;
     });
   }
 
