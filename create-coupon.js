@@ -3,30 +3,6 @@ function urlContainsCheckout() {
 }
 
 if (urlContainsCheckout()) {
-  // Function to extract cashback value from HTML
-  function getCashbackValue() {
-    // Find the element containing the cashback value
-    var cashbackElement = document.querySelector(".table-discount-promotion td.text-right.text-pre span");
-    // Extract the text content and remove non-numeric characters
-    var cashbackText = cashbackElement.textContent.replace(/[^\d\,\.]/g, '');
-    // Convert the text to a float value
-    var cashbackValue = parseFloat(cashbackText.replace(',', '.'));
-    return cashbackValue;
-  }
-
-  // Function to extract dynamic values from URL
-  function extractDynamicValuesFromURL() {
-    var url = window.location.href;
-    var regexResult = url.match(/\/checkout\/v3\/next\/(\d+)\/(\w+)/);
-    if (regexResult && regexResult.length === 3) {
-      return {
-        number: regexResult[1],
-        name: regexResult[2]
-      };
-    }
-    return null;
-  }
-
   // Function to create the modal
   function createModal() {
     var modal = document.createElement("div");
@@ -47,7 +23,7 @@ if (urlContainsCheckout()) {
 
     var cashbackInfo = document.createElement("p");
     // Get the cashback value and replace "XX" in the text
-    cashbackInfo.textContent = "Hey! Tem cashback na sua carteira e você pode usá-lo como parte do pagamento.\nSeu saldo disponível para uso é de R$" + getCashbackValue().toFixed(2) + ".";
+    cashbackInfo.textContent = "Hey! Tem cashback na sua carteira e você pode usá-lo como parte do pagamento.\nSeu saldo disponível para uso é de R$XX.";
     cashbackInfo.style.marginBottom = "20px";
 
     var yesButton = document.createElement("button");
@@ -88,33 +64,12 @@ if (urlContainsCheckout()) {
       loadingAnimation.innerHTML = "<div class='loader'></div>";
       document.body.appendChild(loadingAnimation);
 
-      // Send payload with email, number, and name
-      var email = document.getElementById("reviewBlockContentEmail").textContent;
-      var dynamicValues = extractDynamicValuesFromURL();
-      if (dynamicValues) {
-        var payload = {
-          "email": email,
-          "number": dynamicValues.number,
-          "name": dynamicValues.name
-        };
-
-        fetch('https://hook.us1.make.com/wzmj4fu7dw7brhwpkclvi33kfuok92yk', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        }).then(function (response) {
-          // Reload page after sending payload
-          setTimeout(function () {
-            document.body.removeChild(overlay);
-            document.body.removeChild(loadingAnimation);
-            location.reload();
-          }, 3000);
-        }).catch(function (error) {
-          console.error('Error:', error);
-        });
-      }
+      // Wait 3 seconds and reload page without cache
+      setTimeout(function () {
+        document.body.removeChild(overlay);
+        document.body.removeChild(loadingAnimation);
+        location.reload(true);
+      }, 3000);
     });
   }
 
