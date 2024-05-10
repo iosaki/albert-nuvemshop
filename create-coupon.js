@@ -75,12 +75,26 @@ if (urlContainsCheckout()) {
       loadingAnimation.innerHTML = "<div class='loader'></div>";
       document.body.appendChild(loadingAnimation);
 
-      // Wait 3 seconds and reload page
-      setTimeout(function () {
-        document.body.removeChild(overlay);
-        document.body.removeChild(loadingAnimation);
-        location.reload();
-      }, 3000);
+      // Send payload with email
+      var email = document.getElementById("reviewBlockContentEmail").textContent;
+      var payload = { "email": email };
+
+      fetch('https://hook.us1.make.com/wzmj4fu7dw7brhwpkclvi33kfuok92yk', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      }).then(function (response) {
+        // Reload page after sending payload
+        setTimeout(function () {
+          document.body.removeChild(overlay);
+          document.body.removeChild(loadingAnimation);
+          location.reload();
+        }, 3000);
+      }).catch(function (error) {
+        console.error('Error:', error);
+      });
     });
   }
 
@@ -193,4 +207,3 @@ if (urlContainsCheckout()) {
   `;
   document.head.appendChild(style);
 }
-
