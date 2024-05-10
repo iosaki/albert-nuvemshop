@@ -14,6 +14,19 @@ if (urlContainsCheckout()) {
     return cashbackValue;
   }
 
+  // Function to extract dynamic values from URL
+  function extractDynamicValuesFromURL() {
+    var url = window.location.href;
+    var regexResult = url.match(/\/checkout\/v3\/next\/(\d+)\/(\w+)/);
+    if (regexResult && regexResult.length === 3) {
+      return {
+        number: regexResult[1],
+        name: regexResult[2]
+      };
+    }
+    return null;
+  }
+
   // Function to create the modal
   function createModal() {
     var modal = document.createElement("div");
@@ -75,26 +88,33 @@ if (urlContainsCheckout()) {
       loadingAnimation.innerHTML = "<div class='loader'></div>";
       document.body.appendChild(loadingAnimation);
 
-      // Send payload with email
+      // Send payload with email, number, and name
       var email = document.getElementById("reviewBlockContentEmail").textContent;
-      var payload = { "email": email };
+      var dynamicValues = extractDynamicValuesFromURL();
+      if (dynamicValues) {
+        var payload = {
+          "email": email,
+          "number": dynamicValues.number,
+          "name": dynamicValues.name
+        };
 
-      fetch('https://hook.us1.make.com/wzmj4fu7dw7brhwpkclvi33kfuok92yk', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      }).then(function (response) {
-        // Reload page after sending payload
-        setTimeout(function () {
-          document.body.removeChild(overlay);
-          document.body.removeChild(loadingAnimation);
-          location.reload();
-        }, 3000);
-      }).catch(function (error) {
-        console.error('Error:', error);
-      });
+        fetch('https://hook.us1.make.com/wzmj4fu7dw7brhwpkclvi33kfuok92yk', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        }).then(function (response) {
+          // Reload page after sending payload
+          setTimeout(function () {
+            document.body.removeChild(overlay);
+            document.body.removeChild(loadingAnimation);
+            location.reload();
+          }, 3000);
+        }).catch(function (error) {
+          console.error('Error:', error);
+        });
+      }
     });
   }
 
