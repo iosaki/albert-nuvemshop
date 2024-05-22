@@ -1,3 +1,20 @@
+// Função para definir o cookie
+function setCookie(name, value, days) {
+  var expires = "";
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
+// Definir o cookie useCashback = true
+setCookie("useCashback", "true", 365);
+
+// Exibir mensagem no console
+console.log("loading success");
+
 function criarBalao() {
   // Criar elemento div para o balão de texto
   var balao = document.createElement("div");
