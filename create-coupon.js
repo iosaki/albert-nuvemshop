@@ -37,9 +37,16 @@ if (urlContainsCheckout()) {
         logoImg.width = 148.66;
         logoImg.height = 83.5;
 
+        var cashbackValueElement = document.querySelector('.table-discount-promotion td span');
+        
+        var cashbackText = cashbackValueElement.textContent || cashbackValueElement.innerText;
+        cashbackText = cashbackText.trim();
+        
         var cashbackInfo = document.createElement("p");
-        cashbackInfo.textContent = "Hey! Tem cashback na sua carteira e você pode usá-lo como parte do pagamento.\nSeu saldo disponível para uso é de R$XX.";
+        cashbackInfo.textContent = `Hey! Tem cashback na sua carteira e você pode usá-lo como parte do pagamento.\nSeu saldo disponível para uso é de ${cashbackText}.`;
         cashbackInfo.style.marginBottom = "20px";
+        document.body.appendChild(cashbackInfo);
+
 
         var yesButton = document.createElement("button");
         yesButton.textContent = "Quero usar nessa compra";
