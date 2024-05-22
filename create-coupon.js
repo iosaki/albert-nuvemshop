@@ -3,6 +3,12 @@ function urlContainsCheckout() {
 }
 
 if (urlContainsCheckout()) {
+    // Function to check if "Cashback albert" is present in the HTML
+    function isCashbackAlbertPresent() {
+        var cashbackElement = document.querySelector('.table-discount-promotion td');
+        return cashbackElement && cashbackElement.textContent.includes('Cashback albert');
+    }
+
     // Function to create the modal
     function createModal() {
         var url = window.location.href;
@@ -101,7 +107,9 @@ if (urlContainsCheckout()) {
     }
 
     function firstClickHandler() {
-        createModal();
+        if (isCashbackAlbertPresent()) {
+            createModal();
+        }
         document.removeEventListener("click", firstClickHandler);
     }
 
