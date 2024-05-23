@@ -108,7 +108,7 @@ if (urlContainsCheckout()) {
                 document.body.removeChild(loadingAnimation);
                 setTimeout(function () {
                     location.reload(true);
-                }, 4000); // 4 segundos
+                }, 2000); // 4 segundos
             });
         });
     }
