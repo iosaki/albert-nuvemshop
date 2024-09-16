@@ -69,17 +69,16 @@ if (urlContainsCheckout()) {
     }
 
     // Função para exibir o modal correto com base no estado de login
-    function firstClickHandler() {
+    function showModalBasedOnLogin() {
         if (isUserLoggedIn()) {
             createLoggedInModal();
         } else {
             createNotLoggedInModal();
         }
-        document.removeEventListener("click", firstClickHandler);
     }
 
-    // Adiciona o evento de clique
-    document.addEventListener("click", firstClickHandler);
+    // Exibe o modal automaticamente quando a página carrega
+    showModalBasedOnLogin();
 
     // Estilos para o modal
     var style = document.createElement("style");
