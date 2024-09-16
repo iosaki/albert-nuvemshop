@@ -3,24 +3,14 @@ function urlContainsCheckout() {
 }
 
 if (urlContainsCheckout()) {
-    // Function to check if "Cashback albert" is present in the HTML
-    function isCashbackAlbertPresent() {
-        var cashbackElement = document.querySelector('.table-discount-promotion td');
-        return cashbackElement && cashbackElement.textContent.includes('Cashback albert');
+    // Função para verificar se o usuário está logado
+    function isUserLoggedIn() {
+        var loggedInElement = document.querySelector('a[href="/account"]');
+        return loggedInElement !== null;
     }
 
-    // Function to create the modal
-    function createModal() {
-        var url = window.location.href;
-        var cartIdIndex = url.indexOf("/checkout/v3/next/") + "/checkout/v3/next/".length;
-        var cartIdEndIndex = url.indexOf("/", cartIdIndex);
-        var cartId = url.substring(cartIdIndex, cartIdEndIndex);
-
-        if (!cartId) {
-            console.error("CartID não encontrado na URL.");
-            return;
-        }
-
+    // Função para criar o modal para usuário não logado
+    function createNotLoggedInModal() {
         var modal = document.createElement("div");
         modal.className = "modal";
 
@@ -31,36 +21,11 @@ if (urlContainsCheckout()) {
         closeButton.textContent = "×";
         closeButton.className = "close-icon";
 
-        var logoImg = document.createElement("img");
-        logoImg.src = "https://uploads-ssl.webflow.com/611e7d70d4e879564857dd9d/66154344f41761f4afc3bf7e_albert_logo_com_tagline_1.png";
-        logoImg.alt = "Logo";
-        logoImg.width = 148.66;
-        logoImg.height = 83.5;
-
-        var cashbackValueElement = document.querySelector('.table-discount-promotion td span');
-        
-        var cashbackText = cashbackValueElement.textContent || cashbackValueElement.innerText;
-        cashbackText = cashbackText.trim();
-        
-        var cashbackInfo = document.createElement("p");
-        cashbackInfo.textContent = `Hey! Tem cashback na sua carteira e você pode usá-lo como parte do pagamento.\nSeu saldo disponível para uso é de ${cashbackText}.`;
-        cashbackInfo.style.marginBottom = "20px";
-        document.body.appendChild(cashbackInfo);
-
-
-        var yesButton = document.createElement("button");
-        yesButton.textContent = "Quero usar nessa compra";
-        yesButton.classList.add("button", "yes-button");
-
-        var noButton = document.createElement("button");
-        noButton.textContent = "Não quero usar agora";
-        noButton.classList.add("button", "no-button");
+        var message = document.createElement("p");
+        message.textContent = "Para usar seu cashback, faça login ou crie uma conta.";
 
         modalContent.appendChild(closeButton);
-        modalContent.appendChild(logoImg);
-        modalContent.appendChild(cashbackInfo);
-        modalContent.appendChild(yesButton);
-        modalContent.appendChild(noButton);
+        modalContent.appendChild(message);
         modal.appendChild(modalContent);
 
         document.body.appendChild(modal);
@@ -68,60 +33,55 @@ if (urlContainsCheckout()) {
         closeButton.addEventListener("click", function () {
             document.body.removeChild(modal);
         });
+    }
 
-        noButton.addEventListener("click", function () {
-            yesButton.disabled = true;
-            noButton.disabled = true;
+    // Função para criar o modal para usuário logado
+    function createLoggedInModal() {
+        var modal = document.createElement("div");
+        modal.className = "modal";
 
-            var overlay = document.createElement("div");
-            overlay.className = "overlay";
-            document.body.appendChild(overlay);
+        var modalContent = document.createElement("div");
+        modalContent.className = "modal-content";
 
-            var loadingAnimation = document.createElement("div");
-            loadingAnimation.className = "loading-animation";
-            loadingAnimation.innerHTML = "<div class='loader'></div>";
-            document.body.appendChild(loadingAnimation);
+        var closeButton = document.createElement("span");
+        closeButton.textContent = "×";
+        closeButton.className = "close-icon";
 
-            var email = document.querySelector("#reviewBlockContentEmail").textContent.trim();
+        var message = document.createElement("p");
+        message.textContent = "Olá, você deseja utilizar seu cashback nesta compra?";
 
-            var payload = {
-                cart_id: cartId,
-                email: email
-            };
+        var checkboxLabel = document.createElement("label");
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkboxLabel.textContent = " Utilizar cashback";
+        checkboxLabel.prepend(checkbox);
 
-            fetch("https://hook.us1.make.com/wzmj4fu7dw7brhwpkclvi33kfuok92yk", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            }).then(function (response) {
-                if (response.ok) {
-                    console.log("Payload enviado com sucesso!");
-                } else {
-                    console.error("Erro ao enviar payload:", response.status);
-                }
-            }).catch(function (error) {
-                console.error("Erro ao enviar payload:", error);
-            }).finally(function () {
-                document.body.removeChild(overlay);
-                document.body.removeChild(loadingAnimation);
-                setTimeout(function () {
-                    location.reload(true);
-                }, 2000); // 4 segundos
-            });
+        modalContent.appendChild(closeButton);
+        modalContent.appendChild(message);
+        modalContent.appendChild(checkboxLabel);
+        modal.appendChild(modalContent);
+
+        document.body.appendChild(modal);
+
+        closeButton.addEventListener("click", function () {
+            document.body.removeChild(modal);
         });
     }
 
+    // Função para exibir o modal correto com base no estado de login
     function firstClickHandler() {
-        if (isCashbackAlbertPresent()) {
-            createModal();
+        if (isUserLoggedIn()) {
+            createLoggedInModal();
+        } else {
+            createNotLoggedInModal();
         }
         document.removeEventListener("click", firstClickHandler);
     }
 
+    // Adiciona o evento de clique
     document.addEventListener("click", firstClickHandler);
 
+    // Estilos para o modal
     var style = document.createElement("style");
     style.textContent = `
         .modal {
@@ -161,24 +121,6 @@ if (urlContainsCheckout()) {
             cursor: pointer;
         }
 
-        .yes-button {
-            background: linear-gradient(to right, #ff005a, #ff281e);
-        }
-
-        .no-button {
-            background: white;
-            color: #ff005a;
-            border: 1px solid #ff281e;
-        }
-
-        .yes-button:hover {
-            background: linear-gradient(to right, rgba(255, 0, 90, 0.8), rgba(255, 40, 30, 0.8));
-        }
-
-        .no-button:hover {
-            background: linear-gradient(to right, rgba(255, 0, 90, 0.08), rgba(255, 40, 30, 0.08));
-        }
-
         .overlay {
             position: fixed;
             top: 0;
@@ -201,26 +143,6 @@ if (urlContainsCheckout()) {
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 9999;
         }
-
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 4px solid #ff005a;
-            width: 50px;
-            height: 50px;
-            -webkit-animation: spin 2s linear infinite;
-            animation: spin 2s linear infinite;
-        }
-
-        @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }`;
-
+    `;
     document.head.appendChild(style);
 }
