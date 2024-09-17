@@ -65,6 +65,8 @@ if (urlContainsCheckout()) {
         document.body.appendChild(modal);
 
         yesButton.addEventListener("click", function () {
+            yesButton.disabled = true;
+            noButton.disabled = true;
             document.body.removeChild(modal);
         });
         
