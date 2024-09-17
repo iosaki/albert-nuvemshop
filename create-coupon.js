@@ -113,7 +113,7 @@ if (urlContainsCheckout()) {
                 document.body.removeChild(loadingAnimation);
                 setTimeout(function () {
                     location.reload(true);
-                }, 2000); // 4 segundos
+                }, 4000); 
             });
         });
     }
