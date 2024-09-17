@@ -47,7 +47,6 @@ if (urlContainsCheckout()) {
         cashbackInfo.style.marginBottom = "20px";
         document.body.appendChild(cashbackInfo);
 
-
         var yesButton = document.createElement("button");
         yesButton.textContent = "Quero usar nessa compra";
         yesButton.classList.add("button", "yes-button");
@@ -65,6 +64,10 @@ if (urlContainsCheckout()) {
 
         document.body.appendChild(modal);
 
+        yesButton.addEventListener("click", function () {
+            document.body.removeChild(modal);
+        });
+        
         closeButton.addEventListener("click", function () {
             document.body.removeChild(modal);
         });
