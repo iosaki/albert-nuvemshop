@@ -1,3 +1,9 @@
+function isUserLoggedIn() {
+    var loggedInElement = document.querySelector('a[href="/account"]');
+    console.log('Elemento encontrado:', loggedInElement); // Adicionar log de depuração
+    return loggedInElement !== null;
+}
+
 // Função genérica para criar o balão (modal)
 function criarBalao(contentHTML, includeCheckbox = false, width = "250px", height = "250px") {
   var balao = document.createElement("div");
