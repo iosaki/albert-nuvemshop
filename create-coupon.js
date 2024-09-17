@@ -75,47 +75,45 @@ if (urlContainsCheckout()) {
         });
 
         noButton.addEventListener("click", function () {
-            yesButton.disabled = true;
-            noButton.disabled = true;
+    yesButton.disabled = true;
+    noButton.disabled = true;
 
-            var overlay = document.createElement("div");
-            overlay.className = "overlay";
-            document.body.appendChild(overlay);
+    var overlay = document.createElement("div");
+    overlay.className = "overlay";
+    document.body.appendChild(overlay);
 
-            var loadingAnimation = document.createElement("div");
-            loadingAnimation.className = "loading-animation";
-            loadingAnimation.innerHTML = "<div class='loader'></div>";
-            document.body.appendChild(loadingAnimation);
+    var loadingAnimation = document.createElement("div");
+    loadingAnimation.className = "loading-animation";
+    loadingAnimation.innerHTML = "<div class='loader'></div>";
+    document.body.appendChild(loadingAnimation);
 
-            var email = document.querySelector("#reviewBlockContentEmail").textContent.trim();
+    var email = document.querySelector("#reviewBlockContentEmail").textContent.trim();
 
-            var payload = {
-                cart_id: cartId,
-                email: email
-            };
+    var payload = {
+        cart_id: cartId,
+        email: email
+    };
 
-            fetch("https://hook.us1.make.com/wzmj4fu7dw7brhwpkclvi33kfuok92yk", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            }).then(function (response) {
-                if (response.ok) {
-                    console.log("Payload enviado com sucesso!");
-                } else {
-                    console.error("Erro ao enviar payload:", response.status);
-                }
-            }).catch(function (error) {
-                console.error("Erro ao enviar payload:", error);
-            }).finally(function () {
-                document.body.removeChild(overlay);
-                document.body.removeChild(loadingAnimation);
-                setTimeout(function () {
-                    location.reload(true);
-                }, 4000); 
-            });
-        });
+    fetch("https://hook.us1.make.com/wzmj4fu7dw7brhwpkclvi33kfuok92yk", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    }).then(function (response) {
+        if (response.ok) {
+            console.log("Payload enviado com sucesso!");
+        } else {
+            console.error("Erro ao enviar payload:", response.status);
+        }
+    }).catch(function (error) {
+        console.error("Erro ao enviar payload:", error);
+    }).finally(function () {
+        document.body.removeChild(overlay);
+        document.body.removeChild(loadingAnimation);
+        location.reload(true); // Recarrega a página imediatamente
+    });
+});
     }
 
     function firstClickHandler() {
