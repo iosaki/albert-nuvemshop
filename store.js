@@ -106,5 +106,6 @@ function inicializarComponentes() {
     }
 }
 
-// Inicializar os componentes ao carregar a página
-inicializarComponentes();
+document.addEventListener("DOMContentLoaded", function() {
+    inicializarComponentes();
+});
