@@ -37,7 +37,7 @@ function criarBalao(contentHTML, includeCheckbox = false, width = "250px", heigh
   }
 
   // Estilos e estrutura do balão
-  balao.classList.add("balao-estilo"); // Aplicar classes de estilo
+  balao.classList.add("balao-estilo"); 
 
   // Definir largura e altura específicas
   balao.style.width = width;
