@@ -1,3 +1,7 @@
+// Pegar o domínio atual da janela
+const urlAtual = window.location.origin;
+
+// Criar o balão
 function criarBalao() {
   // Criar elemento div para o balão de texto
   var balao = document.createElement("div");
@@ -44,8 +48,6 @@ function criarBalao() {
   var botao = document.createElement("a");
   botao.style.textDecoration = "none";
   botao.textContent = "Quero cashback";
-  botao.href =
-    "https://associados.oialbert.com.br/criar-conta?code=SEJAASSOCIADO";
   botao.target = "_blank"; // Abrir em uma nova aba
   botao.style.background = "linear-gradient(90deg, #ff281e, #ff005a)";
   botao.style.color = "#fff";
@@ -75,6 +77,22 @@ function criarBalao() {
 
   // Adicionar o balão à página
   document.body.appendChild(balao);
+
+  // Obter o link dinâmico da API e definir o href do botão
+  fetch(`https://ns-dynamic-inviterlink-6454b68346c9.herokuapp.com/webhook`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ domain: urlAtual })
+  })
+    .then(response => response.json())
+    .then(data => {
+      botao.href = data.link; // Definir o href dinamicamente com o link obtido da API
+    })
+    .catch(error => {
+      console.error("Erro ao obter o link:", error);
+    });
 
   return balao;
 }
