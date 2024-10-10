@@ -1,4 +1,4 @@
-function urlContainsCheckout() {
+/*function urlContainsCheckout() {
     return window.location.href.includes("/checkout/v3/next/");
 }
 
@@ -226,3 +226,4 @@ if (urlContainsCheckout()) {
 
     document.head.appendChild(style);
 }
+*/
